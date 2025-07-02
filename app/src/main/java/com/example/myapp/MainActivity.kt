@@ -35,7 +35,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,6 +52,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        enableEdgeToEdge()
+
+        val fontFamily = FontFamily(
+            Font(R.font.bitcountgriddoublevariablefont)
+        )
+
         setContent {
 
 //            Column(
@@ -83,17 +95,59 @@ class MainActivity : ComponentActivity() {
             //---------------------------------------------
 
 
-            val painter = painterResource(id = R.drawable.img)
-            val desc = "Kotlin Programming Language"
-            val title = "Android Programming"
+//            val painter = painterResource(id = R.drawable.img)
+//            val desc = "Kotlin Programming Language"
+//            val title = "Android Programming"
+//
+//            Box (modifier = Modifier
+//                .fillMaxWidth(0.5f)
+//                .padding(16.dp)
+//            ) {
+//                ImageCard (painter = painter,
+//                    contentDescription = desc,
+//                    title = title
+//                )
+//            }
 
-            Box (modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .padding(16.dp)
+
+            //---------------------------------------------
+
+
+            Box (
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black)
+                    .padding(top = 200.dp)
             ) {
-                ImageCard (painter = painter,
-                    contentDescription = desc,
-                    title = title
+                Text (
+                    text = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color.Green,
+                                fontSize = 70.sp
+                            )
+                        ) {
+                            append("J")
+                        }
+
+                        append("etpack ")
+
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color.Green,
+                                fontSize = 70.sp
+                            )
+                        ) {
+                            append("C")
+                        }
+
+                        append("ompose")
+                    },
+
+                    color = Color.White,
+                    fontSize = 50.sp,
+                    fontFamily = fontFamily,
+                    textAlign = TextAlign.Center
                 )
             }
         }
