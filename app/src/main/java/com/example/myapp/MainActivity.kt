@@ -25,11 +25,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -50,6 +56,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapp.ui.theme.MyAppTheme
 import kotlin.random.Random
+import androidx.compose.material3.*
+import androidx.compose.foundation.layout.*
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -158,24 +167,30 @@ class MainActivity : ComponentActivity() {
             //---------------------------------------------
 
 
-            Column (Modifier.fillMaxSize()) {
+//            Column (Modifier.fillMaxSize()) {
+//
+//                val color = remember {
+//                    mutableStateOf(Color.Yellow)
+//                }
+//
+//                ColorBox(
+//                    Modifier.weight(1f).fillMaxSize()
+//                ) {
+//                    color.value = it
+//                }
+//
+//                Box (modifier = Modifier
+//                    .background(color.value)
+//                    .weight(1f)
+//                    .fillMaxSize()
+//                )
+//            }
 
-                val color = remember {
-                    mutableStateOf(Color.Yellow)
-                }
 
-                ColorBox(
-                    Modifier.weight(1f).fillMaxSize()
-                ) {
-                    color.value = it
-                }
+            //---------------------------------------------
 
-                Box (modifier = Modifier
-                    .background(color.value)
-                    .weight(1f)
-                    .fillMaxSize()
-                )
-            }
+
+            MyScaffold()
         }
     }
 }
@@ -253,6 +268,59 @@ fun ColorBox (
 }
 
 
+@Composable
+fun MyScaffold() {
+
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    var textFieldState by remember { mutableStateOf("") }
+
+    ModalNavigationDrawer(
+
+        drawerState = drawerState,
+
+        drawerContent = {
+            ModalDrawerSheet {
+                Text("Drawer Item 1", modifier = Modifier.padding(16.dp))
+                Text("Drawer Item 2", modifier = Modifier.padding(16.dp))
+            }
+        }
+    ) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            snackbarHost = { SnackbarHost(snackbarHostState) }
+        ) {
+            paddingValues ->
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(horizontal = 30.dp)
+            ) {
+                TextField(
+                    value = textFieldState,
+                    label = { Text("Enter your name") },
+                    onValueChange = { textFieldState = it },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer (modifier = Modifier.height(16.dp))
+
+                Button (onClick = {
+                    scope.launch {
+                        snackbarHostState.showSnackbar("Hello $textFieldState")
+                    }
+                }) {
+                    Text ("Please greet me")
+                }
+            }
+        }
+    }
+}
 
 
 
