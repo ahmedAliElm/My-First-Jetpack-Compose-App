@@ -58,6 +58,15 @@ import com.example.myapp.ui.theme.MyAppTheme
 import kotlin.random.Random
 import androidx.compose.material3.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.layout.layoutId
+import androidx.constraintlayout.compose.ChainStyle
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintSet
+import androidx.constraintlayout.compose.Dimension
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -190,7 +199,71 @@ class MainActivity : ComponentActivity() {
             //---------------------------------------------
 
 
-            MyScaffold()
+//            MyScaffold()
+
+
+            //---------------------------------------------
+
+            // Lists
+
+//            LazyColumn {
+//
+//                itemsIndexed(
+//                    listOf("This", "is", "Jetpack", "Compose")
+//                ) {
+//                    index, string ->
+//
+//                    Text (
+//                        text = string,
+//                        fontSize = 24.sp,
+//                        fontWeight = FontWeight.Bold,
+//                        textAlign = TextAlign.Center,
+//                        modifier = Modifier.fillMaxWidth()
+//                            .padding(vertical = 24.dp)
+//                    )
+//                }
+//            }
+
+
+            //---------------------------------------------
+
+
+            val constraints = ConstraintSet {
+
+                val greenBox = createRefFor("greenbox")
+                val redBox = createRefFor("redbox")
+                val guideline = createGuidelineFromTop(0.5f)
+
+                constrain(greenBox) {
+                    top.linkTo(guideline)
+                    start.linkTo(parent.start)
+                    width = Dimension.value(100.dp)
+                    height = Dimension.value(100.dp)
+                }
+
+                constrain(redBox) {
+                    top.linkTo(parent.top)
+                    start.linkTo(greenBox.end)
+                    end.linkTo(parent.end)
+                    width = Dimension.value(100.dp)
+                    height = Dimension.value(100.dp)
+                }
+
+                createHorizontalChain(greenBox, redBox, chainStyle = ChainStyle.Packed)
+            }
+
+            ConstraintLayout (constraints, modifier = Modifier.fillMaxSize()) {
+
+                Box (modifier = Modifier
+                    .background(Color.Green)
+                    .layoutId("greenbox")
+                )
+
+                Box (modifier = Modifier
+                    .background(Color.Red)
+                    .layoutId("redbox")
+                )
+            }
         }
     }
 }
@@ -269,7 +342,7 @@ fun ColorBox (
 
 
 @Composable
-fun MyScaffold() {
+fun MyScaffold () {
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
