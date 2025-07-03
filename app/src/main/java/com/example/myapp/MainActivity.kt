@@ -28,6 +28,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -47,6 +49,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapp.ui.theme.MyAppTheme
+import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,41 +116,64 @@ class MainActivity : ComponentActivity() {
             //---------------------------------------------
 
 
-            Box (
-                modifier = Modifier
+//            Box (
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .background(Color.Black)
+//                    .padding(top = 200.dp)
+//            ) {
+//                Text (
+//                    text = buildAnnotatedString {
+//                        withStyle(
+//                            style = SpanStyle(
+//                                color = Color.Green,
+//                                fontSize = 70.sp
+//                            )
+//                        ) {
+//                            append("J")
+//                        }
+//
+//                        append("etpack ")
+//
+//                        withStyle(
+//                            style = SpanStyle(
+//                                color = Color.Green,
+//                                fontSize = 70.sp
+//                            )
+//                        ) {
+//                            append("C")
+//                        }
+//
+//                        append("ompose")
+//                    },
+//
+//                    color = Color.White,
+//                    fontSize = 50.sp,
+//                    fontFamily = fontFamily,
+//                    textAlign = TextAlign.Center
+//                )
+//            }
+
+
+            //---------------------------------------------
+
+
+            Column (Modifier.fillMaxSize()) {
+
+                val color = remember {
+                    mutableStateOf(Color.Yellow)
+                }
+
+                ColorBox(
+                    Modifier.weight(1f).fillMaxSize()
+                ) {
+                    color.value = it
+                }
+
+                Box (modifier = Modifier
+                    .background(color.value)
+                    .weight(1f)
                     .fillMaxSize()
-                    .background(Color.Black)
-                    .padding(top = 200.dp)
-            ) {
-                Text (
-                    text = buildAnnotatedString {
-                        withStyle(
-                            style = SpanStyle(
-                                color = Color.Green,
-                                fontSize = 70.sp
-                            )
-                        ) {
-                            append("J")
-                        }
-
-                        append("etpack ")
-
-                        withStyle(
-                            style = SpanStyle(
-                                color = Color.Green,
-                                fontSize = 70.sp
-                            )
-                        ) {
-                            append("C")
-                        }
-
-                        append("ompose")
-                    },
-
-                    color = Color.White,
-                    fontSize = 50.sp,
-                    fontFamily = fontFamily,
-                    textAlign = TextAlign.Center
                 )
             }
         }
@@ -202,6 +228,28 @@ fun ImageCard (
             }
         }
     }
+}
+
+
+@Composable
+fun ColorBox (
+    modifier: Modifier = Modifier,
+    updateColor: (Color) -> Unit
+) {
+
+    Box (modifier = modifier
+        .background(Color.Red)
+        .clickable {
+            updateColor (
+                Color(
+                    Random.nextFloat(),
+                    Random.nextFloat(),
+                    Random.nextFloat(),
+                    1f
+                )
+            )
+        }
+    )
 }
 
 
